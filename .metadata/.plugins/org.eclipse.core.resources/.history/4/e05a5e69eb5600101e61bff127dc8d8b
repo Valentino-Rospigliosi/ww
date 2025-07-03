@@ -1,0 +1,26 @@
+package com.cibertec.edu.websocket;
+
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/notificaciones")
+public class NotificacionController {
+
+	private final SimpMessagingTemplate template;
+
+	public NotificacionController(SimpMessagingTemplate template) {
+		this.template = template;
+	}
+
+	@PostMapping("/enviar")
+	public void enviarNotificacion() {
+		NotificacionDto notificacion = new NotificacionDto();
+		notificacion.setTipo("ALERTA");
+		notificacion.setMensaje("Este es un mensaje de prueba WebSocket");
+		notificacion.setCitaId(123);
+
+		template.convertAndSend("/topic/notificaciones", notificacion);
+	}
+}

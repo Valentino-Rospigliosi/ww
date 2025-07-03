@@ -1,0 +1,25 @@
+package com.cibertec.edu.Controller;
+
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class ChatController {
+    // Método para mostrar la página HTML del chat cuando se accede a /mensajes
+    @GetMapping("/mensajes")
+    public String showChatPage() {
+        // Asegúrate de que tengas un archivo llamado 'chat.html' (o 'mensajes.html')
+        // en tu carpeta src/main/resources/templates/
+        return "chat"; // Devuelve el nombre de la plantilla Thymeleaf para el chat
+    }
+
+    // Tu método existente para manejar mensajes de WebSocket
+    @MessageMapping("/send-message")
+    @SendTo("/topic/messages")
+    public String handleChatMessage(String message) {
+        return message;
+    }
+
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Pacientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans flex min-h-screen">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen">
+    <div class="p-6 text-center">
+        <h2 class="text-2xl font-bold">Clinica InkaSalud</h2>
+    </div>
+    <nav class="mt-10">
+        <ul>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">🏠</span>
+                <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">👥</span>
+                <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📅</span>
+                <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+            </li>
+			<!-- 
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">👨‍⚕️</span>
+                <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📋</span>
+                <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+			Contenido principal -->
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- Contenido principal -->
+<div class="flex-grow flex flex-col">
+    <!-- Encabezado -->
+    <header class="bg-blue-800 text-white py-4 shadow-md">
+        <div class="container mx-auto px-6">
+            <h1 class="text-2xl font-bold">Listado de Pacientes</h1>
+        </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="container mx-auto px-6 py-8 flex-grow">
+        <!-- Mensaje de éxito después de registrar un paciente -->
+        <div th:if="${mensaje}" class="alert alert-success mb-6 bg-green-100 text-green-800 p-4 rounded-lg shadow-lg">
+            <p th:text="${mensaje}"></p>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <form class="mb-6 flex justify-end">
+            <input class="p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="search" placeholder="Buscar Paciente..." aria-label="Search" style="width: 200px;" name="buscar">
+            <button class="px-4 py-2 bg-green-500 text-white font-semibold rounded-r-lg hover:bg-green-600 transition" type="submit">Buscar</button>
+        </form>
+
+        <!-- Tabla de pacientes -->
+        <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+            <table class="min-w-full table-auto border-collapse">
+                <thead class="bg-blue-800 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left">ID</th>
+                    <th class="px-6 py-3 text-left">Nombre</th>
+                    <th class="px-6 py-3 text-left">Apellido</th>
+
+                    <th class="px-6 py-3 text-left">Fecha de Nacimiento</th>
+                    <th class="px-6 py-3 text-left">Teléfono</th>
+                    <th class="px-6 py-3 text-left">Email</th>
+                    <th class="px-6 py-3 text-left">Dirección</th>
+                    <th class="px-6 py-3 text-left">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="paciente : ${pacientes}" class="hover:bg-gray-100">
+                    <!-- Mostrar datos de la clase Paciente -->
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.idPaciente}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.nombre}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.apellido}"></td>
+
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.fechaNacimiento}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.telefono}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.email}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700" th:text="${paciente.direccion}"></td>
+                    <td class="px-6 py-4 border-b text-gray-700">
+                        <!-- Actualizado el enlace para usar idPaciente -->
+                        <a th:href="@{/pacientes/editar/{id}(id=${paciente.idPaciente})}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Editar</a>
+                        <a th:href="@{/pacientes/detalle/{id}(id=${paciente.idPaciente})}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Detalles</a>
+                        <a th:href="@{/pacientes/eliminar/{id}(id=${paciente.idPaciente})}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Eliminar</a>                        
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botón para agregar nuevo paciente -->
+        <div class="mt-8 text-right">
+            <a href="/pacientes/nuevo" class="inline-block bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-200">Agregar Nuevo Paciente</a>
+        </div>
+    </main>
+</div>
+
+<!-- Íconos fijos -->
+<div class="fixed top-4 right-4 space-x-4 z-10">
+    <a href="/api/login" class="text-2xl text-gray-500 hover:text-gray-700">
+        <i class="fas fa-sign-out-alt"></i>
+    </a>
+</div>
+
+</body>
+
+</html>

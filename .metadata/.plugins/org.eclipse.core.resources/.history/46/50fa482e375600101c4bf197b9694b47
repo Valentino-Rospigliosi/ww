@@ -1,0 +1,34 @@
+package com.cibertec.edu.dto;
+
+import com.cibertec.edu.models.AuthUsuario;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+public class TokenDto {
+	private String token;
+
+	public TokenDto(String token) {
+		super();
+		this.token = token;
+	}
+
+	public TokenDto() {
+		super();
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	
+	
+}

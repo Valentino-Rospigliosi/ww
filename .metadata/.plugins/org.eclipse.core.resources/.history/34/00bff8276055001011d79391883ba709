@@ -1,0 +1,13 @@
+#Primero compilamos el proyecto para generar el .jar 
+FROM jelastic/maven:3.9.5-openjdk-21 as builder 
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+RUN ls -la /target
+#Ahora configuramos la ejecucion del .jar 
+FROM openjdk:21-jdk-slim
+WORKDIR /app
+RUN echo "Contenido del directorio builder antes de copiar:" && ls -la
+COPY --from=builder /app/target/eureka-server-1.0.0.jar eureka.jar
+EXPOSE 8761
+ENTRYPOINT ["java", "-jar", "eureka.jar"]

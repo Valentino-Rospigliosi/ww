@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinica Salud</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-center min-h-screen" style="background-image: url('https://img.freepik.com/free-photo/young-handsome-physician-medical-robe-with-stethoscope_1303-17818.jpg');">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen fixed">
+  <div class="p-6 text-center">
+    <h2 class="text-2xl font-bold">Clinica Salud</h2>
+  </div>
+  <nav class="mt-10">
+    <ul>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">🏠</span>
+        <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👥</span>
+        <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📅</span>
+        <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👨‍⚕️</span>
+        <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📋</span>
+        <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- Contenido principal -->
+<div class="ml-64 p-8 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
+  <div class="text-center text-white p-8 bg-opacity-75 w-full max-w-4xl">
+    <h1 class="text-4xl font-bold mb-4">Bienvenidos a Clinica Salud</h1>
+    <p class="text-xl mb-6">Comprometidos con la salud de nuestros pacientes</p>
+
+    <p class="text-lg mb-6">En Clinica Salud nos dedicamos a brindar atención médica de calidad, con un equipo de profesionales capacitados que se preocupan por el bienestar de cada paciente. Nuestra misión es proporcionar un ambiente seguro, amigable y accesible para todos.</p>
+
+
+    <!-- Sección de video -->
+    <h2 class="text-3xl font-bold text-center text-white mb-6">¿Por qué es importante cuidar nuestra salud?</h2>
+    <div class="flex justify-center">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/T5kixcEBL2Y?si=GxFeMEdhZQH1Fe2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<footer class="bg-gray-800 text-white text-center py-4 mt-10">
+  <p>&copy; 2024 Clinica Salud. Todos los derechos reservados.</p>
+</footer>
+
+
+
+
+
+
+</body>
+</html>

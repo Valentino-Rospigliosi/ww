@@ -1,0 +1,41 @@
+package com.cibertec.edu.Service.impl;
+
+import com.cibertec.edu.Entity.Paciente;
+import com.cibertec.edu.Repository.PacienteRepository;
+import com.cibertec.edu.Service.PacienteService;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class PacienteServiceImpl implements PacienteService {
+
+
+	@Autowired
+    private PacienteRepository repositoryPaciente;
+
+    @Override
+    public List<Paciente> listarTodos() {
+        return repositoryPaciente.findAll();
+    }
+
+    @Override
+    public Optional<Paciente> buscarPorId(Integer id) {
+        return repositoryPaciente.findById(id);
+    }
+
+    @Override
+    public Paciente guardar(Paciente paciente) {
+        return repositoryPaciente.save(paciente);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+    	repositoryPaciente.deleteById(id);
+    }
+}

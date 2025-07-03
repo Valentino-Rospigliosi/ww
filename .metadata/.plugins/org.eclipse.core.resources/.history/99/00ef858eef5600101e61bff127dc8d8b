@@ -1,0 +1,28 @@
+package WebSocket;
+
+
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    //  Aquí está el método que defines
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws") // este es el endpoint que el frontend se conecta con SockJS
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic"); // dónde escuchan los clientes
+        config.setApplicationDestinationPrefixes("/app"); // prefijo de entrada del cliente
+    }
+}
+
+

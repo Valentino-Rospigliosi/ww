@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Paciente</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
+
+<div class="container mx-auto px-4 py-8 flex-grow">
+
+    <!-- Título -->
+    <h2 class="text-4xl font-semibold text-black mb-8 text-center">Actualizar Paciente</h2>
+
+    <!-- Formulario -->
+    <form th:action="@{/pacientes/actualizar}" th:object="${paciente}" method="post" class="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto space-y-6">
+
+        <!-- Hidden field for ID -->
+        <input type="hidden" th:field="*{idPaciente}" />
+
+        <!-- Nombre -->
+        <div class="mb-6">
+            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" th:field="*{nombre}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="nombre" required />
+        </div>
+
+        <!-- Apellido -->
+        <div class="mb-6">
+            <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
+            <input type="text" th:field="*{apellido}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="apellido" required />
+        </div>
+
+        <!-- Fecha de Nacimiento -->
+        <div class="mb-6">
+            <label for="fechaNacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+            <input type="date" th:field="*{fechaNacimiento}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="fechaNacimiento" required />
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-6">
+            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+            <input type="text" th:field="*{telefono}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="telefono" required />
+        </div>
+
+        <!-- Email -->
+        <div class="mb-6">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" th:field="*{email}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="email" required />
+        </div>
+
+        <!-- Dirección -->
+        <div class="mb-6">
+            <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
+            <input type="text" th:field="*{direccion}" class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700" id="direccion" required />
+        </div>
+
+        <!-- Botones -->
+        <div class="flex space-x-4">
+            <button type="submit" class="w-full bg-black hover:bg-gray-800 text-white font-semibold py-3 rounded-lg transition duration-200">
+                Actualizar
+            </button>
+            <a href="/pacientes/listar" class="w-full text-center py-3 bg-gray-300 hover:bg-gray-400 text-black font-semibold rounded-lg transition duration-200">
+                Regresar
+            </a>
+        </div>
+
+    </form>
+</div>
+
+</body>
+
+</html>

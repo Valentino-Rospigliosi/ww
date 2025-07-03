@@ -1,0 +1,12 @@
+spring.application.name=proy-citas-inkasalud
+
+
+#mysql
+spring.datasource.url=jdbc:mysql://localhost:3306/inkasalud
+spring.datasource.username=root
+spring.datasource.password=123456
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.dll-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+server.port=8085
+

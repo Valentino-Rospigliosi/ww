@@ -1,0 +1,54 @@
+package com.cibertec.edu.websocket;
+
+public class NotificacionDto {
+	private String tipo;
+	private String mensaje;
+	private String detalle;
+	private String fecha;
+
+	public NotificacionDto() {
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
+
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+
+	@Override
+	public String toString() {
+		return "NotificacionDto{" + "tipo='" + tipo + '\'' + ", mensaje='" + mensaje + '\'' + ", detalle='" + detalle
+				+ '\'' + ", fecha='" + fecha + '\'' + '}';
+	}
+
+	public void setCitaId(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+}

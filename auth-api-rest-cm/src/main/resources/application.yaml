@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: auth-api-rest
+  config:
+    import: optional:configserver:http://config-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/medicals
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+      
+server:
+  port: 8090

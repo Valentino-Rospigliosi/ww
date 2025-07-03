@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Médicos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans flex min-h-screen">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen">
+    <div class="p-6 text-center">
+        <h2 class="text-2xl font-bold">Hospital Santa Rosa</h2>
+    </div>
+    <nav class="mt-10">
+        <ul>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">🏠</span>
+                <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">👥</span>
+                <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📅</span>
+                <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">👨‍⚕️</span>
+                <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📋</span>
+                <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- Contenido principal -->
+<div class="flex-grow flex flex-col">
+
+    <!-- Encabezado -->
+    <header class="bg-blue-800 text-white py-4 shadow-md">
+        <div class="container mx-auto px-6">
+            <h1 class="text-2xl font-bold">Listado de Médicos</h1>
+        </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="container mx-auto px-6 py-8 flex-grow">
+        <section class="bg-white shadow-md rounded-lg p-6">
+
+            <!-- Formulario de búsqueda -->
+            <form class="mb-6 flex justify-end" method="get" th:action="@{/medicos/listar}">
+                <input class="p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       type="search" placeholder="Buscar Médico..." aria-label="Search" style="width: 200px;" name="buscar">
+                <button class="px-4 py-2 bg-green-500 text-white font-semibold rounded-r-lg hover:bg-green-600 transition" type="submit">Buscar</button>
+            </form>
+
+            <!-- Tabla -->
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Listado de Médicos</h2>
+            <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-blue-800 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium">ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Nombre</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Apellido</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Especialidad</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Teléfono</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Email</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Dirección</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Disponibilidad</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(medicos)}">
+                    <td colspan="9" class="text-center py-4 text-gray-500">No hay médicos disponibles.</td>
+                </tr>
+                <tr th:each="medico : ${medicos}" class="hover:bg-gray-100 border-b">
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.idMedico}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.nombre}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.apellido}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.especialidad}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.telefono}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.email}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.direccion}"></td>
+                    <td class="px-6 py-3 text-sm text-gray-700" th:text="${medico.disponibilidad}"></td>
+                    <td class="px-6 py-3 text-sm text-center">
+                        <a class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                           th:href="@{/medicos/editar/{id}(id=${medico.idMedico})}">Editar</a>
+                        <a class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                           th:href="@{/medicos/eliminar/{id}(id=${medico.idMedico})}">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+        <!-- Botón para agregar nuevo Medico-->
+        <div class="mt-8 text-right">
+            <a href="/medicos/nuevo" class="inline-block bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-200">Agregar Nuevo Medico</a>
+        </div>
+    </main>
+</div>
+
+<div class="fixed top-4 right-4 space-x-4 z-10">
+
+    <!-- Ícono de Salir -->
+    <a href="/api/login" class="text-2xl text-gray-500 hover:text-gray-700">
+        <i class="fas fa-sign-out-alt"></i>
+    </a>
+</div>
+
+</body>
+</html>

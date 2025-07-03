@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Interno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+<div class="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-4 text-center">Chat en Tiempo Real</h2>
+
+  <div id="messages" class="h-64 overflow-y-scroll border p-4 mb-4 rounded bg-gray-50"></div>
+
+  <input id="emisor" class="w-full mb-2 p-2 border rounded" placeholder="Tu nombre" />
+  <input id="message-input" class="w-full mb-2 p-2 border rounded" placeholder="Escribe un mensaje..." />
+  <button id="send-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded">Enviar</button>
+</div>
+
+<!-- SockJS + STOMP -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+  const socket = new SockJS('/ws');
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    stompClient.subscribe('/topic/messages', (message) => {
+      const msg = JSON.parse(message.body);
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${msg.emisor}:</strong> ${msg.texto}`;
+      document.getElementById('messages').appendChild(p);
+    });
+  });
+
+  document.getElementById('send-button').addEventListener('click', () => {
+    const texto = document.getElementById('message-input').value;
+    const emisor = document.getElementById('emisor').value;
+
+    if (texto.trim() && emisor.trim()) {
+      const mensaje = {
+        texto: texto,
+        emisor: emisor,
+        receptor: "" // opcional, puedes usarlo más adelante
+      };
+      stompClient.send("/app/send-message", {}, JSON.stringify(mensaje));
+      document.getElementById('message-input').value = '';
+    }
+  });
+</script>
+</body>
+</html>

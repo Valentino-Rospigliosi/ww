@@ -1,0 +1,153 @@
+package com.cibertec.edu.Controller;
+
+import java.util.*;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.cibertec.edu.Service.impl.MedicoService;
+
+
+
+@Controller
+@RequestMapping("/pacientes")
+public class pacienteController {
+
+    @Autowired
+    private PacientesRepository pacientesRepository;
+    @Autowired
+    private PacienteService pacienteService;
+
+    @Autowired
+    private MedicoService medicoService;
+
+
+    // Método para listar pacientes, con opción de buscar por nombre
+    @GetMapping("/listar")
+    public String listarPacientes(@RequestParam(required = false) String buscar, Model model) {
+        List<Pacientes> pacientes;
+        if (buscar != null && !buscar.isEmpty()) {
+            pacientes = pacientesRepository.buscarPaciente(buscar);  // Buscar pacientes por nombre
+        } else {
+            pacientes = pacientesRepository.findAll();  // Listar todos los pacientes
+        }
+        model.addAttribute("pacientes", pacientes);
+        return "listaPaciente";  // Nombre de la vista Thymeleaf
+    }
+
+    // Método para mostrar formulario de agregar paciente
+    @GetMapping("/nuevo")
+    public String mostrarFormularioNuevoPaciente(Model model) {
+        Pacientes paciente = new Pacientes();  // Crear un nuevo objeto Pacientes
+        model.addAttribute("paciente", paciente);  // Añadirlo al modelo
+        return "agregarHistorialPaciente";  // Nombre de la vista Thymeleaf
+    }
+
+    // Método para guardar un nuevo paciente
+    @PostMapping("/guardar")
+    public String guardarPaciente(@ModelAttribute Pacientes paciente, Model model) {
+        pacienteService.guardarPaciente(paciente); // Llama al servicio para guardar el paciente
+        model.addAttribute("message", "Paciente guardado correctamente");
+        return "redirect:/pacientes/listar"; // Redirige a la lista de pacientes
+    }
+
+    // Método para editar un paciente
+    @GetMapping("/editar/{id}")
+    public String editarPaciente(@PathVariable Integer id, Model model) {
+        // Find the patient by id
+        Pacientes paciente = pacientesRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID de paciente no válido"));
+
+        // Add the patient to the model so that Thymeleaf can bind it to the form
+        model.addAttribute("paciente", paciente);
+
+        // Return the name of the Thymeleaf template that will render the form
+        return "editarPaciente"; // Nombre de la vista Thymeleaf
+    }
+
+        @PostMapping("/actualizar")
+        public String actualizarPaciente(@ModelAttribute Pacientes paciente) {
+            // Ensure that dni is not null before saving
+            if (paciente.getIdPaciente() == null) {
+                throw new IllegalArgumentException("El ID es obligatorio.");
+            }
+            // Save the updated patient
+            pacientesRepository.save(paciente);
+            // Redirect to another page or return the response
+            return "redirect:/pacientes/listar";
+        }
+
+    // Método para eliminar un paciente
+    @GetMapping("/eliminar/{id}")
+    public String eliminarPaciente(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        pacientesRepository.deleteById(id);  // Eliminar paciente de la base de datos
+        redirectAttributes.addFlashAttribute("mensaje", "Paciente eliminado exitosamente");
+        return "redirect:/pacientes/listar";  // Redirigir al listado de pacientes
+    }
+
+    // Método para ver detalles de un paciente
+    @GetMapping("/detalle/{id}")
+    public String mostrarDetallePaciente(@PathVariable("id") Integer id, Model model) {
+        Optional<Pacientes> pacienteOpt = pacienteService.buscarPorId(id);
+
+        if (pacienteOpt.isPresent()) {
+            model.addAttribute("paciente", pacienteOpt.get()); // Agrega el paciente al modelo
+            return "detallepaciente"; // Nombre de la vista de detalles
+        } else {
+            // Manejo del error si no se encuentra el paciente
+            model.addAttribute("error", "Paciente no encontrado");
+            return "error"; // Si no se encuentra el paciente, redirige a una página de error
+        }
+
+    }
+
+    //
+    // Endpoint para buscar paciente por DNI
+    @GetMapping("/buscarPorId/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
+        Optional<Pacientes> paciente = pacienteService.buscarPorId(id);
+
+        if (paciente.isPresent()) {
+            Pacientes p = paciente.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("nombre", p.getNombre());
+            response.put("apellido", p.getApellido());
+           // response.put("dni", p.getDni());
+            return ResponseEntity.ok(response); // Devuelve solo los datos necesarios
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente no encontrado");
+        }
+    }
+
+    // Listar médicos con sus especialidades
+    @GetMapping("/medicosConEspecialidades")
+    public ResponseEntity<List<Map<String, String>>> listarMedicosConEspecialidades() {
+        return ResponseEntity.ok(medicoService.obtenerMedicosConEspecialidades());
+    }
+
+
+    // Este es el método que debes modificar/reemplazar
+    @GetMapping("/obtenerPacientePorId") // La URL ya es correcta
+    @ResponseBody // Añade esta anotación para que Spring serialice el objeto Pacientes a JSON
+    public ResponseEntity<Pacientes> obtenerPacientePorId(@RequestParam Integer id) {
+        // Asumiendo que pacienteService.buscarPorId(id) devuelve Optional<Pacientes>
+        // Si tu método en el servicio es diferente (ej. findById), úsalo aquí.
+        Optional<Pacientes> pacienteOpt = pacienteService.buscarPorId(id);
+
+        if (pacienteOpt.isPresent()) {
+            return ResponseEntity.ok(pacienteOpt.get()); // Devuelve el objeto Pacientes completo
+        } else {
+            // Devuelve 404 NOT_FOUND si el paciente no existe
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+}

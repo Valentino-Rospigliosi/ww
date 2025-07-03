@@ -1,0 +1,13 @@
+package com.cibertec.edu.Service;
+
+import com.cibertec.edu.Entity.Paciente;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface PacienteService {
+    List<Paciente> listarTodos();
+    Optional<Paciente> buscarPorId(Integer id);
+    Paciente guardar(Paciente paciente);
+    void eliminar(Integer id);
+}

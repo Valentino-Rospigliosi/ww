@@ -1,0 +1,15 @@
+package com.cibertec.edu.Repository;
+
+import com.cibertec.edu.Entity.Paciente;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
+	public List<Paciente> listarTodos();
+	public Optional<Paciente> buscarPorId(Integer id);
+	public Paciente guardar(Paciente paciente);
+	public void eliminar(Integer id);
+}

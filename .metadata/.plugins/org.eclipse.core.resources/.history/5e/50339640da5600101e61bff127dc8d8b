@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Citas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans flex min-h-screen">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen">
+    <div class="p-6 text-center">
+        <h2 class="text-2xl font-bold">Clinica InkaSalud</h2>
+    </div>
+    <nav class="mt-10">
+        <ul>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">🏠</span>
+                <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">👥</span>
+                <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📅</span>
+                <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+            </li>
+			<!-- 
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+				
+                <span class="text-xl">👨‍⚕️</span>
+                <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+            </li>
+            <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+                <span class="text-xl">📋</span>
+                <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+            </li> 
+			-->
+        </ul>
+    </nav>
+</aside>
+
+<div class="flex-grow flex flex-col">
+    <!-- Encabezado -->
+    <header class="bg-blue-800 text-white py-4 shadow-md">
+        <div class="container mx-auto px-6">
+            <h1 class="text-2xl font-bold">Listado de Citas</h1>
+        </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="container mx-auto px-6 py-8 flex-grow">
+        <!-- Mensaje de éxito después de registrar un paciente -->
+        <div th:if="${mensaje}" class="alert alert-success mb-6 bg-green-100 text-green-800 p-4 rounded-lg shadow-lg">
+            <p th:text="${mensaje}"></p>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <form class="mb-6 flex justify-end">
+            <input class="p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="search" placeholder="Buscar Cita..." aria-label="Search" style="width: 200px;" name="buscar">
+            <button class="px-4 py-2 bg-green-500 text-white font-semibold rounded-r-lg hover:bg-green-600 transition" type="submit">Buscar</button>
+        </form>
+
+        <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+            <table class="min-w-full table-auto bg-white text-gray-800 rounded-lg shadow-lg">
+                <thead class="bg-blue-800 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-lg">ID</th>
+
+                    <th class="px-6 py-3 text-lg">Paciente</th>
+                    <th class="px-6 py-3 text-lg">Médico</th>
+                    <th class="px-6 py-3 text-lg">Especialidad</th>
+                    <th class="px-6 py-3 text-lg">Fecha</th>
+                    <th class="px-6 py-3 text-lg">Motivo</th>
+                    <th class="px-6 py-3 text-lg">Estado</th>
+                    <th class="px-6 py-3 text-lg">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cita : ${citas}" class="border-t">
+                    <td class="px-6 py-4 border-b text-center" th:text="${cita.idCita}"></td>
+
+                    <td class="px-6 py-4 border-b" th:text="${cita.nombrePaciente} + ' ' + ${cita.apellidoPaciente}"></td>
+                    <td class="px-6 py-4 border-b" th:text="${cita.nombreMedico} + ' ' + ${cita.apellidoMedico}"></td>
+                    <td class="px-6 py-4 border-b" th:text="${cita.especialidad}"></td>
+                    <td class="px-6 py-4 border-b text-center" th:text="${#dates.format(cita.fecha, 'dd/MM/yyyy')}"></td>
+                    <td class="px-6 py-4 border-b" th:text="${cita.motivo}"></td>
+                    <td class="px-6 py-4 border-b text-center" th:text="${cita.estado}"></td>
+                    <td class="px-6 py-4 border-b text-center">
+						
+						<div class="flex justify-center gap-3">
+						        <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Editar</a>
+						        <a th:href="@{/citas/detalle/{id}(id=${cita.idCita})}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Ver Detalle</a>
+						        <a th:href="@{/citas/eliminar/{id}(id=${cita.idCita})}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" onclick="return confirm('¿Estás seguro de eliminar esta cita?');">Eliminar</a>
+						    </div>
+						
+                         </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botón para agregar nueva cita -->
+        <div class="mt-8 text-right">
+            <a href="/citas/nuevo" class="inline-block bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-200">Agregar Nueva Cita</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+
+</html>

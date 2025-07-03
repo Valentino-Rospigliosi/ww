@@ -1,0 +1,23 @@
+package WebSocket;
+
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic"); // lo que el servidor envía a los clientes
+        config.setApplicationDestinationPrefixes("/app"); // lo que los clientes envían al servidor
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/chat").setAllowedOriginPatterns("*").withSockJS(); // punto de conexión del cliente
+    }
+}
+

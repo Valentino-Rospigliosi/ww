@@ -1,0 +1,52 @@
+package com.cibertec.edu.Controller;
+
+import com.cibertec.edu.Entity.Paciente;
+import com.cibertec.edu.Service.PacienteService;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/pacientes")
+@RequiredArgsConstructor
+public class PacienteController {
+
+	@Autowired
+    private PacienteService service;
+
+    @GetMapping
+    public List<Paciente> listar() {
+        return service.listarTodos();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Paciente> buscar(@PathVariable Integer id) {
+        return service.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Paciente registrar(@RequestBody Paciente paciente) {
+        return service.guardar(paciente);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Paciente> actualizar(@PathVariable Integer id, @RequestBody Paciente paciente) {
+        return service.buscarPorId(id).map(p -> {
+            paciente.setId_paciente(id);
+            return ResponseEntity.ok(service.guardar(paciente));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/test-delete/{id}")
+    public ResponseEntity<Void> testEliminar(@PathVariable Integer id) {
+        return ResponseEntity.noContent().build();
+
+
+}
+}

@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: empleados-api-rest
+              uri: lb://empleados-api-rest
+              predicates:
+                - Path=/api/v1/empleados/**
+              filters:
+                - AuthenticationFilter
+
+            - id: contratos-api-rest
+              uri: lb://contratos-api-rest
+              predicates:
+                - Path=/api/v1/contratos/**
+              filters:
+                - AuthenticationFilter
+            
+            - id: auth-api-rest
+              uri: lb://auth-api-rest
+              predicates:
+                - Path=/v1/auth/**
+server:
+  port: 8094
+   
+management:
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      access: read-only
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+        
+eureka:
+  instance:
+   prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+                

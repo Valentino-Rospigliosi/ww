@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://cibertec.edu/citas"
+           xmlns:tns="http://cibertec.edu/citas"
+           elementFormDefault="qualified">
+
+  <!-- Solicitud para registrar cita -->
+  <xs:element name="RegistrarCitaRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="idPaciente" type="xs:int"/>
+        <xs:element name="nombrePaciente" type="xs:string"/>
+        <xs:element name="apellidoPaciente" type="xs:string"/>
+        <xs:element name="especialidad" type="xs:string"/>
+        <xs:element name="medico" type="xs:string"/>
+        <xs:element name="fecha" type="xs:string"/>
+        <xs:element name="motivo" type="xs:string"/>
+        <xs:element name="estado" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Respuesta del registro de cita -->
+  <xs:element name="RegistrarCitaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="resultado" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

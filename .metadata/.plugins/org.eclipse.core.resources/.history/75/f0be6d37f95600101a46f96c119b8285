@@ -1,0 +1,23 @@
+package com.cibertec.edu.Controller;
+
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.cibertec.edu.Entity.Mensaje;
+
+@Controller
+public class ChatController {
+
+    @GetMapping("/mensajes")
+    public String showChatPage() {
+        return "chat"; // Nombre del archivo HTML en src/main/resources/templates/
+    }
+
+    @MessageMapping("/send-message") // Cliente envía a /app/send-message
+    @SendTo("/topic/messages")       // Todos escuchan desde aquí
+    public Mensaje handleChatMessage(Mensaje mensaje) {
+        return mensaje; // Se reenvía tal cual para todos los clientes
+    }
+}

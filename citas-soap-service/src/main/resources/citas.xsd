@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.example.com/citas"
+           targetNamespace="http://www.example.com/citas"
+           elementFormDefault="qualified">
+
+    <!-- Definición de los elementos para una Cita -->
+    <xs:complexType name="cita">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long" minOccurs="0"/> <!-- ID autogenerado, opcional en la solicitud -->
+            <xs:element name="idPaciente" type="xs:long"/>
+            <xs:element name="nombrePaciente" type="xs:string"/>
+            <xs:element name="apellidoPaciente" type="xs:string"/>
+            <xs:element name="especialidad" type="xs:string"/>
+            <xs:element name="medico" type="xs:string"/>
+            <xs:element name="fechaCita" type="xs:date"/>
+            <xs:element name="motivo" type="xs:string"/>
+            <xs:element name="estado" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Petición para registrar una nueva cita -->
+    <xs:element name="registrarCitaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cita" type="tns:cita"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Respuesta para registrar una nueva cita -->
+    <xs:element name="registrarCitaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cita" type="tns:cita"/>
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Petición para obtener una cita por ID -->
+    <xs:element name="obtenerCitaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Respuesta para obtener una cita por ID -->
+    <xs:element name="obtenerCitaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cita" type="tns:cita" minOccurs="0"/> <!-- minOccurs="0" porque podría no encontrarse -->
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Petición para actualizar una cita existente -->
+    <xs:element name="actualizarCitaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cita" type="tns:cita"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Respuesta para actualizar una cita existente -->
+    <xs:element name="actualizarCitaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cita" type="tns:cita" minOccurs="0"/>
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Petición para eliminar una cita por ID -->
+    <xs:element name="eliminarCitaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Respuesta para eliminar una cita por ID -->
+    <xs:element name="eliminarCitaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Petición para obtener todas las citas -->
+    <xs:element name="obtenerTodasCitasRequest">
+        <xs:complexType/> <!-- No necesita elementos dentro de la solicitud -->
+    </xs:element>
+
+    <!-- Respuesta para obtener todas las citas -->
+    <xs:complexType name="obtenerTodasCitasResponse">
+        <xs:sequence>
+            <xs:element name="citas" type="tns:cita" minOccurs="0" maxOccurs="unbounded"/> <!-- Lista de citas -->
+            <xs:element name="mensaje" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="obtenerTodasCitasResponse" type="tns:obtenerTodasCitasResponse"/>
+
+</xs:schema>

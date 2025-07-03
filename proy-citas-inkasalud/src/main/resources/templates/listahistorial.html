@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Actualizar Historial Clínico</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome (para los íconos) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans flex min-h-screen">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen">
+  <div class="p-6 text-center">
+    <h2 class="text-2xl font-bold">Hospital Santa Rosa</h2>
+  </div>
+  <nav class="mt-10">
+    <ul>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">🏠</span>
+        <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👥</span>
+        <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📅</span>
+        <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👨‍⚕️</span>
+        <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📋</span>
+        <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- Contenido principal -->
+<div class="flex-grow flex flex-col">
+  <!-- Encabezado -->
+  <header class="bg-blue-800 text-white py-4 shadow-md">
+    <div class="container mx-auto px-6">
+      <h1 class="text-2xl font-bold">Actualizar Historial Clínico</h1>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="container mx-auto px-6 py-8 flex-grow">
+    <!-- Formulario de búsqueda -->
+    <form class="mb-6 flex justify-end">
+      <input class="p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="search" placeholder="Buscar Historial..." aria-label="Search" style="width: 200px;" name="buscar">
+      <button class="px-4 py-2 bg-green-500 text-white font-semibold rounded-r-lg hover:bg-green-600 transition" type="submit">Buscar</button>
+    </form>
+
+    <!-- Link para agregar nuevo historial -->
+    <div class="mb-4 text-center">
+      <a href="/historial/nuevo" class="text-lg font-semibold text-blue-500 hover:text-blue-700">Nuevo Historial</a>
+    </div>
+
+
+    <!-- Tabla de historial -->
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+      <table class="min-w-full table-auto border-collapse">
+        <thead class="bg-blue-800 text-white">
+        <tr>
+          <th class="px-6 py-3 text-lg">ID</th>
+
+          <th class="px-6 py-3 text-lg">Paciente</th>
+          <th class="px-6 py-3 text-lg">Fecha</th>
+          <th class="px-6 py-3 text-lg">Enfermedad</th>
+          <th class="px-6 py-3 text-lg">Tratamiento</th>
+          <th class="px-6 py-3 text-lg">Observaciones</th>
+          <th class="px-6 py-3 text-lg">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="historial : ${historial}" class="border-t">
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${historial.idHistorial}"></td>
+
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${historial.nombrePaciente} + ' ' + ${historial.apellidoPaciente}"></td>
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${#dates.format(historial.fecha, 'dd/MM/yyyy')}"></td>
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${historial.enfermedad}"></td>
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${historial.tratamiento}"></td>
+          <td class="px-6 py-3 text-sm border-b text-gray-800" th:text="${historial.observaciones}"></td>
+          <td class="px-6 py-3 text-sm border-b text-gray-800">
+            <a th:href="@{/historial/editar/{id}(id=${historial.idHistorial})}" class="px-1 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Editar</a>
+            <a th:href="@{/historial/detalle/{id}(id=${historial.idHistorial})}" class="px-1 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Ver Detalle</a>
+            <a th:href="@{/historial/eliminar/{id}(id=${historial.idHistorial})}" class="px-1 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" onclick="return confirm('¿Estás seguro de eliminar esta Historia?');">Eliminar</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Botón para agregar nueva cita -->
+    <div class="mt-8 text-right">
+      <a href="/historial/nuevo" class="inline-block bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-200">Agregar Nuevo Historial</a>
+    </div>
+  </main>
+</div>
+
+<!-- Íconos de mensaje y sesión en la esquina -->
+<div class="fixed top-4 right-4 space-x-4 z-10">
+
+  <!-- Ícono de Salir -->
+  <a href="/api/login" class="text-2xl text-gray-500 hover:text-gray-700">
+    <i class="fas fa-sign-out-alt"></i>
+  </a>
+
+</div>
+
+
+
+</body>
+</html>

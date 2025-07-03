@@ -1,0 +1,69 @@
+package com.cibertec.edu.Service.impl;
+
+
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+
+
+import java.util.*;
+
+@Service
+public class PacienteService {
+
+    @Autowired
+    private PacientesRepository pacientesRepository;
+
+    public Pacientes findById(Integer id) {
+        return pacientesRepository.findById(id).orElse(null);  // Devolverá el paciente si lo encuentra o null si no
+    }
+
+    // Método para obtener todos los pacientes
+    public List<Pacientes> obtenerTodos() {
+        return pacientesRepository.findAll();  // Devuelve todos los pacientes
+    }
+
+    // Método para buscar pacientes por nombre
+    public List<Pacientes> buscarPacientesPorNombre(String nombre) {
+        return pacientesRepository.buscarPaciente(nombre);  // Utiliza el método personalizado
+    }
+    // Método para obtener un paciente por su DNI
+
+
+    public void guardarPaciente(Pacientes paciente) {
+        pacientesRepository.save(paciente);  // Guarda el paciente en la base de datos
+    }
+    /*
+    public Optional<Pacientes> obtenerPacientePorId(Integer id) {
+        return pacientesRepository.findById(id); // Retorna un Optional con el paciente
+    }
+*/
+    ///
+    public Optional<Pacientes> buscarPorId(Integer id) {
+        return pacientesRepository.findById(id);
+    }
+
+    public Map<String, String> obtenerPacientePorId(Integer id) {
+        Optional<Pacientes> pacienteOpt = pacientesRepository.findById(id);
+        Map<String, String> pacienteData = new HashMap<>();
+
+        System.out.println("Buscando paciente con ID: " + id);  // Verificar que el DNI recibido es correcto
+
+        if (pacienteOpt.isPresent()){
+            Pacientes paciente = pacienteOpt.get();
+            System.out.println("Paciente encontrado con ID: " + paciente.getIdPaciente());
+
+            pacienteData.put("id", String.valueOf(paciente.getIdPaciente()));
+            pacienteData.put("nombre", paciente.getNombre());
+            pacienteData.put("apellido", paciente.getApellido());
+
+        }else {
+            pacienteData.put("error", "Paciente no encontrado");
+        }
+
+        return pacienteData;
+    }
+
+}

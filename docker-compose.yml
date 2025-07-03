@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+
+  config-server:
+    build:
+      context: ./config-server-cm
+    ports:
+      - "8888:8888"
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  auth-api-rest:
+    build:
+      context: ./auth-api-rest-cm
+    ports:
+      - "8081:8081"
+    depends_on:
+      - config-server
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    build:
+      context: ./api-gateway-cm
+    ports:
+      - "8080:8080"
+    depends_on:
+      - config-server
+      - auth-api-rest
+      - proy-citas
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  proy-citas:
+    build:
+      context: ./proy-citas-inkasalud
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-server
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+networks:
+  inkasalud-net:
+    driver: bridge

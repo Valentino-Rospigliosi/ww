@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinica Salud</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-center min-h-screen" style="background-image: url('https://img.freepik.com/free-photo/young-handsome-physician-medical-robe-with-stethoscope_1303-17818.jpg');">
+
+<!-- Barra lateral -->
+<aside class="w-64 bg-blue-800 text-white min-h-screen fixed">
+  <div class="p-6 text-center">
+    <h2 class="text-2xl font-bold">Clinica Salud</h2>
+  </div>
+  <nav class="mt-10">
+    <ul>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">🏠</span>
+        <a href="/home/listar" class="ml-4 font-semibold">Home</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👥</span>
+        <a href="/pacientes/listar" class="ml-4 font-semibold">Pacientes</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📅</span>
+        <a href="/citas/listar" class="ml-4 font-semibold">Citas</a>
+      </li>
+	  <!-- Barra lateral
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">👨‍⚕️</span>
+        <a href="/medicos/listar" class="ml-4 font-semibold">Médicos</a>
+      </li>
+      <li class="px-6 py-3 hover:bg-blue-700 flex items-center">
+        <span class="text-xl">📋</span>
+        <a href="/historial/listar" class="ml-4 font-semibold">Historial Médico</a>
+      </li> 
+	  -->
+    </ul>
+  </nav>
+</aside>
+
+<!-- Contenido principal -->
+<div class="ml-64 p-8 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
+  <div class="text-center text-white p-8 bg-opacity-75 w-full max-w-4xl">
+    <h1 class="text-4xl font-bold mb-4">Bienvenidos a Clinica Salud</h1>
+    <p class="text-xl mb-6">Comprometidos con la salud de nuestros pacientes</p>
+
+    <p class="text-lg mb-6">En Clinica Salud nos dedicamos a brindar atención médica de calidad, con un equipo de profesionales capacitados que se preocupan por el bienestar de cada paciente. Nuestra misión es proporcionar un ambiente seguro, amigable y accesible para todos.</p>
+
+
+    <!-- Sección de video -->
+    <h2 class="text-3xl font-bold text-center text-white mb-6">¿Por qué es importante cuidar nuestra salud?</h2>
+    <div class="flex justify-center">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/T5kixcEBL2Y?si=GxFeMEdhZQH1Fe2r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<footer class="bg-gray-800 text-white text-center py-4 mt-10">
+  <p>&copy; 2024 Clinica Salud. Todos los derechos reservados.</p>
+</footer>
+
+
+<!-- Botón flotante del chat -->
+<div class="fixed bottom-6 right-6 z-50">
+  <button id="toggleChat" class="bg-blue-600 text-white text-2xl rounded-full w-14 h-14 shadow-lg hover:bg-blue-700">💬</button>
+</div>
+
+<!-- Ventana del chat -->
+<div id="chatContainer" class="fixed bottom-20 right-6 bg-white w-80 rounded-lg shadow-lg hidden z-50">
+  <div class="bg-blue-600 text-white p-3 font-semibold rounded-t-lg">Chat InkaSalud</div>
+  <div id="chatMessages" class="p-3 h-60 overflow-y-auto bg-gray-50 text-sm"></div>
+  <div class="p-3 border-t">
+    <input id="chatEmisor" type="text" placeholder="Tu nombre" class="mb-2 w-full p-2 border rounded" />
+    <input id="chatInput" type="text" placeholder="Escribe un mensaje..." class="w-full p-2 border rounded" />
+    <button id="sendMessage" class="w-full mt-2 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Enviar</button>
+  </div>
+</div>
+
+<!-- Scripts al final del body -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleChat = document.getElementById('toggleChat');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatEmisor = document.getElementById('chatEmisor');
+    const sendMessage = document.getElementById('sendMessage');
+
+    toggleChat.addEventListener('click', () => {
+      chatContainer.classList.toggle('hidden');
+    });
+
+    const socket = new SockJS('/ws'); // Asegúrate que sea "/ws" como en WebSocketConfig
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, () => {
+      stompClient.subscribe('/topic/messages', (message) => {
+        const msg = JSON.parse(message.body);
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${msg.emisor}:</strong> ${msg.texto}`;
+        chatMessages.appendChild(p);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    });
+
+    sendMessage.addEventListener('click', () => {
+      const texto = chatInput.value.trim();
+      const emisor = chatEmisor.value.trim();
+
+      if (texto && emisor) {
+        const mensaje = {
+          texto: texto,
+          emisor: emisor,
+          receptor: ""
+        };
+        stompClient.send('/app/send-message', {}, JSON.stringify(mensaje));
+        chatInput.value = '';
+      }
+    });
+  });
+</script>
+
+
+
+
+</body>
+</html>
