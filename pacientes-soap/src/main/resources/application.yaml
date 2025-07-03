@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: pacientes-soap
+  config:
+    import: optional:configserver:http://config-server
+server:
+  port: 8093
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
