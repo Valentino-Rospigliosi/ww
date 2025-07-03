@@ -49,6 +49,30 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
+  clientes-soap:
+    build:
+      context: ./clientes-soap
+    ports:
+      - "8092:8092"
+    depends_on:
+      - config-server
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  pacientes-soap:
+    build:
+      context: ./pacientes-soap
+    ports:
+      - "8093:8093"
+    depends_on:
+      - config-server
+    networks:
+      - inkasalud-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
 networks:
   inkasalud-net:
     driver: bridge

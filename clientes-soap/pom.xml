@@ -12,10 +12,10 @@
         <relativePath/> </parent>
 
     <groupId>com.cibertec.edu</groupId>
-    <artifactId>soap-pacientes</artifactId>
+    <artifactId>soap-clientes</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>soap-pacientes</name>
-    <description>Proyecto de pacientes con SOAP</description>
+    <name>soap-clientes</name>
+    <description>Proyecto de clientes con SOAP</description>
 
     <properties>
         <java.version>21</java.version>
@@ -106,7 +106,7 @@
                         <configuration>
                             <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
                             <schemas>
-                                <schema>pacientes.xsd</schema>
+                                <schema>clientes.xsd</schema>
                             </schemas>
                             <generatePackage>com.cibertec.edu.ws</generatePackage>
                             <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory>
