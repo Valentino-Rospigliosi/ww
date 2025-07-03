@@ -17,6 +17,7 @@ import com.cibertec.edu.Repository.PacientesRepository;
 import com.cibertec.edu.Service.impl.CitasService;
 import com.cibertec.edu.Service.impl.MedicoService;
 import com.cibertec.edu.Service.impl.PacienteService;
+import com.cibertec.edu.Soap.SoapCitasClient;
 
 import DTO.CitaDTO;
 
@@ -43,6 +44,8 @@ public class CitasController {
     private MedicoService medicoService;
     @Autowired
     private MedicosRepository medicosRepository;
+    @Autowired
+    private SoapCitasClient soapCitasClient;
 
     // Método para listar todas las citas
 
@@ -53,12 +56,12 @@ public class CitasController {
         if (buscar != null && !buscar.trim().isEmpty()) {
             List<Citas> citasEncontradas = citasRepository.buscarCitas(buscar);
             citas = citasEncontradas.stream()
-                    .map(CitaDTO::new)  // Convertir Citas a CitaDTO
+                    .map(CitaDTO::new)
                     .collect(Collectors.toList());
         } else {
-            List<Citas> todasLasCitas = citasRepository.findAll();
-            citas = todasLasCitas.stream()
-                    .map(CitaDTO::new)  // Convertir Citas a CitaDTO
+            var response = soapCitasClient.obtenerTodasCitas();
+            citas = response.getCitas().stream()
+                    .map(CitaDTO::new)
                     .collect(Collectors.toList());
         }
 
