@@ -4,6 +4,7 @@ package DTO;
 import java.sql.Date;
 
 import com.cibertec.edu.Entity.Citas;
+import com.example.citas.ws.Cita;
 
 public class CitaDTO {
     private Integer idCita;
@@ -27,6 +28,23 @@ public class CitaDTO {
         this.apellidoMedico = cita.getMedico().getApellido();
         this.especialidad = cita.getMedico().getEspecialidad();
         this.fecha = cita.getFecha();
+        this.motivo = cita.getMotivo();
+        this.estado = cita.getEstado();
+    }
+
+    // Constructor para objetos obtenidos de servicios SOAP
+    public CitaDTO(Cita cita) {
+        this.idCita = cita.getId() != null ? cita.getId().intValue() : null;
+        this.idPaciente = (int) cita.getIdPaciente();
+        this.nombrePaciente = cita.getNombrePaciente();
+        this.apellidoPaciente = cita.getApellidoPaciente();
+        this.nombreMedico = cita.getMedico();
+        this.apellidoMedico = "";
+        this.especialidad = cita.getEspecialidad();
+        if (cita.getFechaCita() != null) {
+            this.fecha = java.sql.Date
+                    .valueOf(cita.getFechaCita().toGregorianCalendar().toZonedDateTime().toLocalDate());
+        }
         this.motivo = cita.getMotivo();
         this.estado = cita.getEstado();
     }
